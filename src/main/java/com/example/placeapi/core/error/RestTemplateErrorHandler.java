@@ -1,19 +1,16 @@
-package com.example.placeapi;
+package com.example.placeapi.core.error;
 
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 
 import java.io.IOException;
 
-
+@Slf4j
 public class RestTemplateErrorHandler extends DefaultResponseErrorHandler {
 
     @Override
     public void handleError(ClientHttpResponse response) throws IOException {
         System.out.println(response.getStatusCode().value());
-        if (response.getStatusCode() == HttpStatus.PRECONDITION_FAILED) {
-            //throw new CUSTOM_EXCEPTION(msg);
-        }
     }
 }

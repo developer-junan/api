@@ -1,15 +1,16 @@
-package com.example.placeapi;
+package com.example.placeapi.domain.place.service;
 
-import com.example.placeapi.repository.PlaceRepository;
-import com.example.placeapi.repository.httpClient.KakaoPlaceHttpClient;
-import com.example.placeapi.repository.httpClient.NaverPlaceHttpClient;
-import com.example.placeapi.vo.KakaoResponse;
-import com.example.placeapi.vo.NaverResponse;
+import com.example.placeapi.domain.place.repository.PlaceRepository;
+import com.example.placeapi.domain.place.repository.httpClient.KakaoPlaceHttpClient;
+import com.example.placeapi.domain.place.repository.httpClient.NaverPlaceHttpClient;
+import com.example.placeapi.domain.place.vo.KakaoResponse;
+import com.example.placeapi.domain.place.vo.NaverResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -34,9 +35,19 @@ public class PlaceService {
         List<String> placesByKakao = getPlaceListByKakao(encodeKeyword, page, size);
         List<String> placesByNaver = getPlaceListByNaver(encodeKeyword, page, size);
 
+        if (ObjectUtils.isEmpty(placesByKakao) && ObjectUtils.isEmpty(placesByNaver)) {
+            return Collections.emptyList();
+        }
+
         Map<String, List<String>> placeAggregationMap = new HashMap<>();
-        placeAggregationMap.put("kakao", placesByKakao);
-        placeAggregationMap.put("naver", placesByNaver);
+
+        if (!ObjectUtils.isEmpty(placesByKakao)) {
+            placeAggregationMap.put("kakao", placesByKakao);
+        }
+
+        if (!ObjectUtils.isEmpty(placesByNaver)) {
+            placeAggregationMap.put("naver", placesByNaver);
+        }
 
         //ex.. google 추가 시 api 연동 결과 List, placeAggregationMap에 추가 로직 1줄
         return orderByPlaces(placeAggregationMap, size);
@@ -45,7 +56,15 @@ public class PlaceService {
     public List<String> orderByPlaces(Map<String, List<String>> placeAggregationMap, int size) {
         int searchTargetCount = placeAggregationMap.keySet().size();
 
+        if (searchTargetCount == 0) {
+            return Collections.emptyList();
+        }
+
         List<String> companies = new ArrayList<>(placeAggregationMap.keySet());
+
+        if (searchTargetCount == 1) {
+            return placeAggregationMap.get(companies.get(0));
+        }
 
         Map<String, Float> resultMap = calculateRating(placeAggregationMap, searchTargetCount, companies);
 
@@ -93,39 +112,50 @@ public class PlaceService {
     }
 
     private List<String> getPlaceListByKakao(String encodeKeyword, int page, int size) {
-        ResponseEntity<KakaoResponse> response = kakaoPlaceHttpClient.findPlaceByKeyword(encodeKeyword, page, size);
 
-        if (ObjectUtils.isEmpty(response) || ObjectUtils.isEmpty(response.getBody())) {
+        try {
+            ResponseEntity<KakaoResponse> response = kakaoPlaceHttpClient.findPlaceByKeyword(encodeKeyword, page, size);
+
+            if (ObjectUtils.isEmpty(response) || ObjectUtils.isEmpty(response.getBody())) {
+                return Collections.emptyList();
+            }
+
+            List<KakaoResponse.Document> documents = response.getBody().getDocuments();
+
+            if (ObjectUtils.isEmpty(documents)) {
+                return Collections.emptyList();
+            }
+
+            return documents.stream()
+                    .map(document -> document.getPlaceName().trim())
+                    .collect(Collectors.toList());
+
+        } catch (ResourceAccessException ex) {
             return Collections.emptyList();
         }
-
-        List<KakaoResponse.Document> documents = response.getBody().getDocuments();
-
-        if (ObjectUtils.isEmpty(documents)) {
-            return Collections.emptyList();
-        }
-
-        return documents.stream()
-                .map(document -> document.getPlaceName().trim())
-                .collect(Collectors.toList());
     }
 
     private List<String> getPlaceListByNaver(String encodeKeyword, int page, int size) {
-        ResponseEntity<NaverResponse> response = naverPlaceHttpClient.findPlaceByKeyword(encodeKeyword, page, size);
+        try {
+            ResponseEntity<NaverResponse> response = naverPlaceHttpClient.findPlaceByKeyword(encodeKeyword, page, size);
 
-        if (ObjectUtils.isEmpty(response) || ObjectUtils.isEmpty(response.getBody())) {
+            if (ObjectUtils.isEmpty(response) || ObjectUtils.isEmpty(response.getBody())) {
+                return Collections.emptyList();
+            }
+
+            List<NaverResponse.Item> items = response.getBody().getItems();
+
+            if (ObjectUtils.isEmpty(items)) {
+                return Collections.emptyList();
+            }
+
+            return items.stream()
+                    .map(item -> item.getTitle().replaceAll("<b>", "").replaceAll("</b>", "").trim())
+                    .collect(Collectors.toList());
+
+        } catch (ResourceAccessException ex) {
             return Collections.emptyList();
         }
-
-        List<NaverResponse.Item> items = response.getBody().getItems();
-
-        if (ObjectUtils.isEmpty(items)) {
-            return Collections.emptyList();
-        }
-
-        return items.stream()
-                .map(item -> item.getTitle().replaceAll("<b>", "").replaceAll("</b>", "").trim())
-                .collect(Collectors.toList());
     }
 
 

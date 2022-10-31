@@ -1,4 +1,4 @@
-package com.example.placeapi.repository.httpClient;
+package com.example.placeapi.domain.place.repository.httpClient;
 
 import org.springframework.http.ResponseEntity;
 

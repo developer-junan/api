@@ -1,4 +1,4 @@
-package com.example.placeapi.vo;
+package com.example.placeapi.domain.place.vo;
 
 import lombok.Getter;
 

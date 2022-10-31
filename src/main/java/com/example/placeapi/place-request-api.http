@@ -1,0 +1,7 @@
+# 1. 장소 검색
+GET http://localhost:8080/place/v1/search/keywords?keyword=곱창&page=1&size=5
+
+###
+
+# 2. 검색 키워드 목록
+GET http://localhost:8080/place/v1/search/keywords/rank?size=5

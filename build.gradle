@@ -25,6 +25,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+    implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-cache'
+
     testImplementation group: 'org.jmock', name: 'jmock-junit5', version: '2.12.0'
 }
 

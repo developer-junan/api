@@ -1,6 +1,6 @@
-package com.example.placeapi.repository.httpClient;
+package com.example.placeapi.domain.place.repository.httpClient;
 
-import com.example.placeapi.vo.KakaoResponse;
+import com.example.placeapi.domain.place.vo.KakaoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;

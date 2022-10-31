@@ -1,5 +1,6 @@
-package com.example.placeapi;
+package com.example.placeapi.core.config;
 
+import com.example.placeapi.core.error.RestTemplateErrorHandler;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,8 +14,8 @@ public class RestTemplateConfig {
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplateBuilder()
-                .setConnectTimeout(Duration.ofSeconds(3))
-                .setReadTimeout(Duration.ofSeconds(3))
+                .setConnectTimeout(Duration.ofMillis(1))
+                .setReadTimeout(Duration.ofMillis(1))
                 .errorHandler(new RestTemplateErrorHandler())
                 .build();
     }
@@ -22,8 +23,8 @@ public class RestTemplateConfig {
     @Bean
     public RestTemplate kakaoRestTemplate() {
         return new RestTemplateBuilder()
-                .setConnectTimeout(Duration.ofSeconds(3))
-                .setReadTimeout(Duration.ofSeconds(3))
+                .setConnectTimeout(Duration.ofSeconds(1))
+                .setReadTimeout(Duration.ofSeconds(1))
                 .errorHandler(new RestTemplateErrorHandler())
                 .build();
     }
@@ -31,8 +32,8 @@ public class RestTemplateConfig {
     @Bean
     public RestTemplate naverRestTemplate() {
         return new RestTemplateBuilder()
-                .setConnectTimeout(Duration.ofSeconds(3))
-                .setReadTimeout(Duration.ofSeconds(3))
+                .setConnectTimeout(Duration.ofSeconds(1))
+                .setReadTimeout(Duration.ofSeconds(1))
                 .errorHandler(new RestTemplateErrorHandler())
                 .build();
     }

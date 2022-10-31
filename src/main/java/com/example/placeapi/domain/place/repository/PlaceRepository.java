@@ -1,4 +1,4 @@
-package com.example.placeapi.repository;
+package com.example.placeapi.domain.place.repository;
 
 import org.springframework.stereotype.Repository;
 

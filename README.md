@@ -8,6 +8,11 @@
     'com.github.ben-manes.caffeine:caffine'
     장소 정보 조회 데이터에 대한 캐싱 처리 -> 조회 성능 개선 목표
 
+# 직접 활용한 외부 라이브러리 (3)
+
+    'spring-boot-starter-webflux'
+    WebClient를 이용한 비동기 API 호출
+
 # 구현 요구 사항 설명
 
 # 1. 동시성 이슈가 발생할 수 있는 부분을 염두에 둔 설계 및 구현 (예시. 키워드 별로 검색된 횟수)
@@ -26,9 +31,12 @@
 
 # 3. 구글 장소 검색 등 새로운 검색 API 제공자의 추가 시 변경 영역 최소화에 대한 고려
 
-     - calculateScore 계산 메서드에 넘기는 Map에 api target Service, api result list를 key, value 형태로 추가
+     - API 연동 추가 (WebClient, implements PlaceHttpClient) 
+     - calculateScore 계산 메서드에 넘기는 Map을 전달하는데 
+        이 때, map에 Key : api target Service명, value : API 연동 결과
+        등록
 
 # 4. 대용량 트래픽 처리를 위한 반응성(Low Latency), 확장성(Scalability), 가용성(Availability)을 높이기 위한 고려
 
      - 반응성 : 캐싱 처리 (로컬 캐시)
-     - 가용성 : Asyn Api Call
+     - 가용성 : WebClient를 이용한 비동기 API 호출

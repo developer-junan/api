@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.io.UnsupportedEncodingException;
-
 @Slf4j
 @RestControllerAdvice(annotations = {RestController.class})
 public class RestControllerExceptionHandler {
@@ -28,12 +26,12 @@ public class RestControllerExceptionHandler {
         return getErrorResponse(ErrorTypeEnum.ERROR_0001);
     }
 
-    @ExceptionHandler(value = {UnsupportedEncodingException.class})
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponseVO unsupportedEncodingException(Exception ex) {
-        log.error(ex.getMessage(), ex);
-        return getErrorResponse(ErrorTypeEnum.ERROR_0002);
-    }
+//    @ExceptionHandler(value = {UnsupportedEncodingException.class})
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    public ErrorResponseVO unsupportedEncodingException(Exception ex) {
+//        log.error(ex.getMessage(), ex);
+//        return getErrorResponse(ErrorTypeEnum.ERROR_0002);
+//    }
 
 
     private ErrorResponseVO getErrorResponse(ErrorTypeEnum errorTypeEnum) {

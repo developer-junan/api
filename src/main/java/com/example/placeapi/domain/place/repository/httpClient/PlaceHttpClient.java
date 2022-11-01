@@ -4,4 +4,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface PlaceHttpClient<T> {
     ResponseEntity<T> findPlaceByKeyword(String keyword, int page, int size);
+
+    T asyncFindPlaceByKeyword(String keyword, int page, int size);
 }

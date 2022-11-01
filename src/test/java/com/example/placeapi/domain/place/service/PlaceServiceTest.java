@@ -44,25 +44,25 @@ class PlaceServiceTest {
         String[] keys = new String[]{"가", "나", "다", "라", "마"};
         Long[] values = new Long[]{5L, 3L, 4L, 1L, 2L};
 
-        placeService.storeSearchKeyWord("가");
-        placeService.storeSearchKeyWord("가");
-        placeService.storeSearchKeyWord("가");
-        placeService.storeSearchKeyWord("가");
-        placeService.storeSearchKeyWord("가");
+        placeService.storeSearchKeyWordCount("가");
+        placeService.storeSearchKeyWordCount("가");
+        placeService.storeSearchKeyWordCount("가");
+        placeService.storeSearchKeyWordCount("가");
+        placeService.storeSearchKeyWordCount("가");
 
-        placeService.storeSearchKeyWord("나");
-        placeService.storeSearchKeyWord("나");
-        placeService.storeSearchKeyWord("나");
+        placeService.storeSearchKeyWordCount("나");
+        placeService.storeSearchKeyWordCount("나");
+        placeService.storeSearchKeyWordCount("나");
 
-        placeService.storeSearchKeyWord("다");
-        placeService.storeSearchKeyWord("다");
-        placeService.storeSearchKeyWord("다");
-        placeService.storeSearchKeyWord("다");
+        placeService.storeSearchKeyWordCount("다");
+        placeService.storeSearchKeyWordCount("다");
+        placeService.storeSearchKeyWordCount("다");
+        placeService.storeSearchKeyWordCount("다");
 
-        placeService.storeSearchKeyWord("라");
+        placeService.storeSearchKeyWordCount("라");
 
-        placeService.storeSearchKeyWord("마");
-        placeService.storeSearchKeyWord("마");
+        placeService.storeSearchKeyWordCount("마");
+        placeService.storeSearchKeyWordCount("마");
 
         int size = 5;
         Map<String, Long> map = placeService.searchKeywordsRank(size);

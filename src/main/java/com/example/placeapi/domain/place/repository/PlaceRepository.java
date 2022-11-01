@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PlaceRepository {
     private final ConcurrentHashMap<String, Long> map = new ConcurrentHashMap<>();
 
-    public void storeSearchKeyWord(String keyword) {
+    public void storeSearchKeyWordCount(String keyword) {
         map.putIfAbsent(keyword, 0L);
         map.merge(keyword, 1L, Long::sum);
     }

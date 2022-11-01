@@ -9,6 +9,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.net.URI;
 
@@ -18,14 +19,19 @@ public class KakaoPlaceHttpClient implements PlaceHttpClient<KakaoResponse> {
 
     private final RestTemplate kakaoRestTemplate;
 
+    private final WebClient kakaoWebClient;
+
     @Value("${kakao.place-api.url}")
     private String apiUrl;
+
+    @Value("${kakao.authorization.token}")
+    private String token;
 
     @Override
     public ResponseEntity<KakaoResponse> findPlaceByKeyword(String encodeKeyword, int page, int size) {
         HttpHeaders headers = new HttpHeaders();
 
-        headers.set("Authorization", "KakaoAK 299471cbf59110f557b8a296b70c56f7");
+        headers.set("Authorization", String.format("KakaoAK %s", token));
 
         return kakaoRestTemplate.exchange(
                 URI.create(String.format("%s?query=%s&page=%s&size=%s", apiUrl, encodeKeyword, page, size)),
@@ -33,5 +39,23 @@ public class KakaoPlaceHttpClient implements PlaceHttpClient<KakaoResponse> {
                 new HttpEntity<>(headers),
                 KakaoResponse.class
         );
+    }
+
+    @Override
+    public KakaoResponse asyncFindPlaceByKeyword(String keyword, int page, int size) {
+        return kakaoWebClient.get()
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .queryParam("query", keyword)
+                                .queryParam("page", page)
+                                .queryParam("size", size)
+                                .build()
+                )
+                .retrieve()
+                .bodyToMono(KakaoResponse.class)
+                .flux()
+                .toStream()
+                .findFirst()
+                .orElse(null);
     }
 }

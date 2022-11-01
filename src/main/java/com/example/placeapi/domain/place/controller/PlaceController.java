@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +20,7 @@ public class PlaceController {
     @GetMapping("/search/keywords")
     public List<String> searchByKeyWord(@RequestParam String keyword,
                                         @RequestParam(defaultValue = "1", required = false) int page,
-                                        @RequestParam(defaultValue = "5", required = false) int size) throws UnsupportedEncodingException {
+                                        @RequestParam(defaultValue = "5", required = false) int size) {
         return placeService.searchByKeyWord(keyword, page, size);
     }
 

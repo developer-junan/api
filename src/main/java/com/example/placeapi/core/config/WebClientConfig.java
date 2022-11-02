@@ -1,4 +1,4 @@
-package com.example.placeapi.core;
+package com.example.placeapi.core.config;
 
 import io.netty.channel.ChannelOption;
 import org.springframework.beans.factory.annotation.Value;

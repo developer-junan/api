@@ -1,11 +1,9 @@
 package com.example.placeapi.domain.place.repository;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.util.ObjectUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
@@ -18,6 +16,11 @@ public class PlaceRepository {
     }
 
     public Map<String, Long> searchKeywordsRank(int size) {
+
+        if (ObjectUtils.isEmpty(map)) {
+            return Collections.emptyMap();
+        }
+
         List<Map.Entry<String, Long>> lists = new ArrayList<>(map.entrySet());
         lists.sort((obj1, obj2) -> obj2.getValue().compareTo(obj1.getValue()));
 
